@@ -16,7 +16,20 @@ class Board
   end
 end
 
+class CurrentPlayer
+  attr_reader :mark
+
+  def initialize
+    @mark = 'x'
+  end
+
+  def switch
+    @mark = mark == 'x' ? 'o' : 'x'
+  end
+end
+
 game_board = Board.new
+current_player = CurrentPlayer.new
 
 condition = true
 while condition
@@ -27,7 +40,6 @@ while condition
   move_row = gets.chomp.to_i
   print 'column: '
   move_col = gets.chomp.to_i
-  game_board.update(move_row, move_col, 'x')
-
+  game_board.update(move_row, move_col, current_player.mark)
+  current_player.switch
 end
-
