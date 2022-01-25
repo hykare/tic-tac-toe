@@ -11,8 +11,8 @@ class Board
     end
   end
 
-  def update(row, col, mark)
-    @state[row - 1][col - 1] = mark
+  def update(row, col, player)
+    @state[row - 1][col - 1] = player.mark
   end
 end
 
@@ -40,6 +40,6 @@ while condition
   move_row = gets.chomp.to_i
   print 'column: '
   move_col = gets.chomp.to_i
-  game_board.update(move_row, move_col, current_player.mark)
+  game_board.update(move_row, move_col, current_player)
   current_player.switch
 end
