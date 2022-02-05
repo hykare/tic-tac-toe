@@ -11,8 +11,12 @@ class Board
     end
   end
 
-  def update(row, col, player)
-    @state[row - 1][col - 1] = player.mark
+  # position formatted as string 3b 1c etc.
+  # should the translation from 2b -> [row][col] format be somewhere else?
+  def update(position, player)
+    row = position[0].to_i - 1
+    col = position[1].tr('abc', '012').to_i
+    @state[row][col] = player.mark
   end
 end
 
@@ -28,6 +32,17 @@ class CurrentPlayer
   end
 end
 
+def get_move_position
+  move = ''
+  loop do
+    puts 'make a move'
+    move = gets.chomp
+    move_valid = move =~ /[123][abc]/
+    break if move_valid
+  end
+  move
+end
+
 game_board = Board.new
 current_player = CurrentPlayer.new
 
@@ -35,11 +50,12 @@ condition = true
 while condition
   system 'clear'
   game_board.draw
-  puts 'make a move'
-  print 'row: '
-  move_row = gets.chomp.to_i
-  print 'column: '
-  move_col = gets.chomp.to_i
-  game_board.update(move_row, move_col, current_player)
+  position = get_move_position
+  game_board.update(position, current_player)
   current_player.switch
 end
+
+# TODO
+# check for win
+# check if board full - tie
+# reject taken positions
