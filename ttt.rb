@@ -4,7 +4,9 @@ class Board
   end
 
   def draw
-    @state.each do |row|
+    puts '    a    b    c'
+    @state.each_with_index do |row, i|
+      print "#{i+1} "
       print row
       puts ''
       puts ''
@@ -57,7 +59,7 @@ end
 def get_move_position
   move = ''
   loop do
-    puts 'make a move'
+    puts 'make a move (1b, 3a etc.)'
     move = gets.chomp
     move_valid = move =~ /[123][abc]/
     break if move_valid
@@ -83,3 +85,4 @@ end
 # reject taken positions
 # fix markers so they're not strings
 # fix match results so they're not strings
+# rewrite match result method
