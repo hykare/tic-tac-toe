@@ -21,6 +21,12 @@ class Board
     @state[row][col] = player.mark
   end
 
+  def clear
+    @state.each do |row|
+      row.fill(' ')
+    end
+  end
+
   # this could only check current player marks if it's run after a valid move
   def check_match_result
     # horizontal
@@ -53,7 +59,7 @@ class Board
 end
 
 class CurrentPlayer
-  attr_reader :mark
+  attr_accessor :mark # can be reader if a new object is made for a new game
 
   def initialize
     @mark = 'x'
@@ -85,6 +91,19 @@ while condition
   game_board.update(position, current_player)
   current_player.switch
 
+  next if game_board.check_match_result == 'undetermined'
+
+  puts game_board.check_match_result
+  puts 'do you want to play again? y/n'
+  answer = gets.chomp
+  if answer == 'y'
+    game_board.clear # can I reassign game_board to a new object and just ignore the old one?
+    current_player.mark = 'x' # needs a setter/ attr.writer
+  else
+    puts 'Thanks for playing!'
+    condition = false
+  end
+
 end
 
 # TODO
@@ -94,3 +113,9 @@ end
 # organize getting input/validation into functions
 # put position, translation, getting input into a class somehow?
 # confusing names, move/position. input_move, valid_move? input_position?
+# redraw the board when match is finished, the last move doesn't show up
+# game treats every key other then y as no, change it to do nothing unless its n? another loop?
+# putting things into functions - need to be passed all of the relevant objects ?
+
+# CURRENT
+# reset to play another game or exit once the game result is determined
