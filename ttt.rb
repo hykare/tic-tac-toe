@@ -14,11 +14,8 @@ class Board
   end
 
   # position formatted as string 3b 1c etc.
-  # should the translation from 2b -> [row][col] format be somewhere else?
-  def update(position, player)
-    row = position[0].to_i - 1
-    col = position[1].tr('abc', '012').to_i
-    @state[row][col] = player.mark
+  def update(move, player)
+    @state[move.row][move.col] = player.mark
   end
 
   def clear
@@ -50,11 +47,8 @@ class Board
     'tie'
   end
 
-  def cell_free?(position)
-    # copy pasted from update, make the translation separate
-    row = position[0].to_i - 1
-    col = position[1].tr('abc', '012').to_i
-    @state[row][col] == ' '
+  def cell_free?(move)
+    @state[move.row][move.col] == ' '
   end
 end
 
@@ -70,6 +64,20 @@ class CurrentPlayer
   end
 end
 
+class Move
+  attr_reader :row, :col
+
+  def initialize(input)
+    # incorrect values get stored as 9
+    @row = input[0].tr('^123', '9').tr('123', '012').to_i
+    @col = input[1].tr('^abc', '9').tr('abc', '012').to_i
+  end
+
+  def valid?
+    @row.between?(0, 2) && @col.between?(0, 2)
+  end
+end
+
 game_board = Board.new
 current_player = CurrentPlayer.new
 
@@ -80,15 +88,16 @@ while condition
   game_board.draw
 
   # this should be in a separate function(s?)
-  position = ''
+  move = '' # initialize out of the loop scope / I don't like the type change
   loop do
     puts 'make a move (1b, 3a etc.)'
-    position = gets.chomp
-    move_valid = position =~ /[123][abc]/ && game_board.cell_free?(position)
+    input = gets.chomp
+    move = Move.new(input)
+    move_valid = move.valid? && game_board.cell_free?(move)
     break if move_valid
   end
 
-  game_board.update(position, current_player)
+  game_board.update(move, current_player)
   current_player.switch
 
   next if game_board.check_match_result == 'undetermined'
