@@ -13,7 +13,6 @@ class Board
     end
   end
 
-  # position formatted as string 3b 1c etc.
   def update(move, player)
     @state[move.row][move.col] = player.mark
   end
@@ -28,19 +27,19 @@ class Board
   def check_match_result
     # horizontal
     @state.each do |row|
-      return 'o_won' if row.all? { |mark| mark == 'o' }
-      return 'x_won' if row.all? { |mark| mark == 'x' }
+      return 'o won' if row.all? { |mark| mark == 'o' }
+      return 'x won' if row.all? { |mark| mark == 'x' }
     end
     # vertical
     (0..2).each do |i|
-      return 'o_won' if @state.all? { |row| row[i] == 'o' }
-      return 'x_won' if @state.all? { |row| row[i] == 'x' }
+      return 'o won' if @state.all? { |row| row[i] == 'o' }
+      return 'x won' if @state.all? { |row| row[i] == 'x' }
     end
     # diagonals
-    return 'o_won' if @state[0][0] == 'o' && @state[1][1] == 'o' && @state[2][2] == 'o'
-    return 'o_won' if @state[0][2] == 'o' && @state[1][1] == 'o' && @state[2][0] == 'o'
-    return 'x_won' if @state[0][0] == 'x' && @state[1][1] == 'x' && @state[2][2] == 'x'
-    return 'x_won' if @state[0][2] == 'x' && @state[1][1] == 'x' && @state[2][0] == 'x'
+    return 'o won' if @state[0][0] == 'o' && @state[1][1] == 'o' && @state[2][2] == 'o'
+    return 'o won' if @state[0][2] == 'o' && @state[1][1] == 'o' && @state[2][0] == 'o'
+    return 'x won' if @state[0][0] == 'x' && @state[1][1] == 'x' && @state[2][2] == 'x'
+    return 'x won' if @state[0][2] == 'x' && @state[1][1] == 'x' && @state[2][0] == 'x'
 
     return 'undetermined' if @state.any? { |row| row.any? { |mark| mark == ' ' } }
 
@@ -53,7 +52,7 @@ class Board
 end
 
 class CurrentPlayer
-  attr_accessor :mark # can be reader if a new object is made for a new game
+  attr_accessor :mark # setter is only needed to reset objects after a game
 
   def initialize
     @mark = 'x'
@@ -97,7 +96,6 @@ current_player = CurrentPlayer.new
 condition = true
 while condition
   system 'clear'
-  puts "match result: #{game_board.check_match_result}"
   game_board.draw
 
   move = get_valid_move(game_board)
@@ -111,24 +109,10 @@ while condition
   answer = gets.chomp
   if answer == 'y'
     game_board.clear # can I reassign game_board to a new object and just ignore the old one?
-    current_player.mark = 'x' # needs a setter/ attr.writer
+    current_player.mark = 'x'
   else
     puts 'Thanks for playing!'
     condition = false
   end
 
 end
-
-# TODO
-# fix markers/free cells so they're not strings
-# fix match results so they're not strings
-# rewrite match result method, it's ugly
-# organize getting input/validation into functions
-# put position, translation, getting input into a class somehow?
-# confusing names, move/position. input_move, valid_move? input_position?
-# redraw the board when match is finished, the last move doesn't show up
-# game treats every key other then y as no, change it to do nothing unless its n? another loop?
-# putting things into functions - need to be passed all of the relevant objects ?
-
-# CURRENT
-# reset to play another game or exit once the game result is determined
