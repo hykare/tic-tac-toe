@@ -78,6 +78,19 @@ class Move
   end
 end
 
+# this should probably belong to some class
+def get_valid_move(game_board)
+  move = ''
+  loop do
+    puts 'make a move (1b, 3a etc.)'
+    input = gets.chomp
+    move = Move.new(input)
+    move_valid = move.valid? && game_board.cell_free?(move)
+    break if move_valid
+  end
+  move
+end
+
 game_board = Board.new
 current_player = CurrentPlayer.new
 
@@ -87,16 +100,7 @@ while condition
   puts "match result: #{game_board.check_match_result}"
   game_board.draw
 
-  # this should be in a separate function(s?)
-  move = '' # initialize out of the loop scope / I don't like the type change
-  loop do
-    puts 'make a move (1b, 3a etc.)'
-    input = gets.chomp
-    move = Move.new(input)
-    move_valid = move.valid? && game_board.cell_free?(move)
-    break if move_valid
-  end
-
+  move = get_valid_move(game_board)
   game_board.update(move, current_player)
   current_player.switch
 
