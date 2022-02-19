@@ -23,23 +23,22 @@ class Board
     end
   end
 
-  # this could only check current player marks if it's run after a valid move
-  def check_match_result
+  # checks only current player marks (has to be in order switch->move->check)
+  # should separate game results from messages
+  def check_match_result(player)
+    win_message = "#{player.mark} won"
+
     # horizontal
     @state.each do |row|
-      return 'o won' if row.all? { |mark| mark == 'o' }
-      return 'x won' if row.all? { |mark| mark == 'x' }
+      return win_message if row.all? { |mark| mark == player.mark }
     end
     # vertical
     (0..2).each do |i|
-      return 'o won' if @state.all? { |row| row[i] == 'o' }
-      return 'x won' if @state.all? { |row| row[i] == 'x' }
+      return win_message if @state.all? { |row| row[i] == player.mark }
     end
     # diagonals
-    return 'o won' if @state[0][0] == 'o' && @state[1][1] == 'o' && @state[2][2] == 'o'
-    return 'o won' if @state[0][2] == 'o' && @state[1][1] == 'o' && @state[2][0] == 'o'
-    return 'x won' if @state[0][0] == 'x' && @state[1][1] == 'x' && @state[2][2] == 'x'
-    return 'x won' if @state[0][2] == 'x' && @state[1][1] == 'x' && @state[2][0] == 'x'
+    return win_message if @state[0][0] == player.mark && @state[1][1] == player.mark && @state[2][2] == player.mark
+    return win_message if @state[0][2] == player.mark && @state[1][1] == player.mark && @state[2][0] == player.mark
 
     return 'undetermined' if @state.any? { |row| row.any? { |mark| mark == ' ' } }
 
@@ -97,14 +96,13 @@ condition = true
 while condition
   system 'clear'
   game_board.draw
-
+  current_player.switch
   move = get_valid_move(game_board)
   game_board.update(move, current_player)
-  current_player.switch
 
-  next if game_board.check_match_result == 'undetermined'
+  next if game_board.check_match_result(current_player) == 'undetermined'
 
-  puts game_board.check_match_result
+  puts game_board.check_match_result(current_player)
   puts 'do you want to play again? y/n'
   answer = gets.chomp
   if answer == 'y'
