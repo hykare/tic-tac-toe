@@ -4,13 +4,18 @@ class Board
   end
 
   def draw
-    puts '    a    b    c'
+    puts '    a   b   c'
     @state.each_with_index do |row, i|
+      puts '  -------------'
       print "#{i + 1} "
-      print row
-      puts ''
+      row.each do |cell|
+        print '|'
+        print ' ', cell, ' '
+      end
+      print '|' # last divider in a row
       puts ''
     end
+    puts "  -------------\n\n"
   end
 
   def update(move, player)
