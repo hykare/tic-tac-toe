@@ -4,6 +4,7 @@ class Board
   end
 
   def draw
+    system 'clear'
     puts '    a   b   c'
     @state.each_with_index do |row, i|
       puts '  -------------'
@@ -31,7 +32,7 @@ class Board
   # checks only current player marks (has to be in order switch->move->check)
   # should separate game results from messages
   def check_match_result(player)
-    win_message = "#{player.mark} won"
+    win_message = "#{player.mark} won!\n\n"
 
     # horizontal
     @state.each do |row|
@@ -99,7 +100,6 @@ current_player = CurrentPlayer.new
 
 condition = true
 while condition
-  system 'clear'
   game_board.draw
   current_player.switch
   move = get_valid_move(game_board)
@@ -107,6 +107,7 @@ while condition
 
   next if game_board.check_match_result(current_player) == 'undetermined'
 
+  game_board.draw
   puts game_board.check_match_result(current_player)
   puts 'do you want to play again? y/n'
   answer = gets.chomp
