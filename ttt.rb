@@ -39,8 +39,8 @@ class Board
       return win_message if row.all? { |mark| mark == player.mark }
     end
     # vertical
-    (0..2).each do |i|
-      return win_message if @state.all? { |row| row[i] == player.mark }
+    (0..2).each do |column|
+      return win_message if @state.all? { |row| row[column] == player.mark }
     end
     # diagonals
     return win_message if @state[0][0] == player.mark && @state[1][1] == player.mark && @state[2][2] == player.mark
