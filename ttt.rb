@@ -72,6 +72,7 @@ class Move
   attr_reader :row, :col
 
   def initialize(input)
+    input = '99' if input.size < 2
     # incorrect values get stored as 9
     @row = input[0].tr('^123', '9').tr('123', '012').to_i
     @col = input[1].tr('^abc', '9').tr('abc', '012').to_i
