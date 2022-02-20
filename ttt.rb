@@ -33,7 +33,7 @@ class Board
   # should separate game results from messages
   def check_match_result(player)
     win_message = "#{player.mark} won!\n\n"
-
+    tie_message = "It's a tie!\n\n"
     # horizontal
     @state.each do |row|
       return win_message if row.all? { |mark| mark == player.mark }
@@ -48,7 +48,7 @@ class Board
 
     return 'undetermined' if @state.any? { |row| row.any? { |mark| mark == ' ' } }
 
-    'tie'
+    tie_message
   end
 
   def cell_free?(move)
