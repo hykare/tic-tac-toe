@@ -85,13 +85,20 @@ end
 
 # this should probably belong to some class
 def get_valid_move(game_board)
+  puts 'Make a move (1b, 3a etc.)'
+  position_free = true
+  format_valid = true
   move = ''
   loop do
-    puts 'make a move (1b, 3a etc.)'
+    puts "Invalid format, make a move formatted as 1a, 2c etc." if !format_valid
+    puts "That position is taken! Pick an empty spot" if !position_free
+
     input = gets.chomp
     move = Move.new(input)
-    move_valid = move.valid? && game_board.cell_free?(move)
-    break if move_valid
+    format_valid = move.valid?
+    next unless format_valid
+    position_free = game_board.cell_free?(move)
+    break if format_valid && position_free
   end
   move
 end
