@@ -106,8 +106,8 @@ end
 game_board = Board.new
 current_player = CurrentPlayer.new
 
-condition = true
-while condition
+game_on = true
+while game_on
   game_board.draw
   current_player.switch
   move = get_valid_move(game_board)
@@ -124,7 +124,7 @@ while condition
     current_player.mark = 'x'
   else
     puts 'Thanks for playing!'
-    condition = false
+    game_on = false
   end
 
 end
